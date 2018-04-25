@@ -77,11 +77,15 @@ class App(Frame):
         self.fileTreeIsCompleteText = Label(self, text=self.fileGenerationHandler.fileTreeIsComplete)
         self.fileTreeIsCompleteText.grid(row=2, column=0, columnspan=2, pady=5)
 
+        self.genPMRButton = Button(self, text="Manual Generate PMR", command=self.fileGenerationHandler.generatePMR)
+        self.genPMRButton.grid(row=3, column=0)
+
         # Add all to main widget group
         self.mainWidgets.append(self.currentDirText)
         self.mainWidgets.append(self.changeDirButton)
         self.mainWidgets.append(self.generateFileTreeButton)
         self.mainWidgets.append(self.fileTreeIsCompleteText)
+        self.mainWidgets.append(self.genPMRButton)
 
     def browseDirectory(self):
 

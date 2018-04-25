@@ -1,4 +1,5 @@
 import os
+import datetime
 
 class FileGenerationHandler():
 
@@ -52,3 +53,34 @@ class FileGenerationHandler():
             self.fileTreeIsComplete = "File tree has been generated"
 
         return self.fileTreeIsComplete
+
+    def generatePMR(self):
+        # Will generate a PMR outline in each project folder within any of the subdirectories
+        self.doInEachSubFolder(self.findProjFolder)
+
+    # Defines a general PMR outline with automatic title and date generation
+    def pmrOutline(self, folder):
+        now = datetime.datetime.now()
+        date = str(now.month) + "/" + str(now.day) + "/" + str(now.year)
+        return ("Project Title: " + folder + "\nPurpose: \nName: \nDate: " + date + "\n\n" +
+                "**************************** P M R ***********************************\n\n" +
+                "<+s> \n\n<-s> \n\n*********************************************************************")
+
+    def findProjFolder(self, path):
+        for folder in os.listdir(path):
+            foundPMR = False
+            # Do nothing with files, only want folders
+            if not '.' in folder:
+                # Get each file in each folder
+                for file in os.listdir(os.path.join(path, folder)):
+                    if file == 'PMR.txt':
+                        foundPMR = True
+                        break
+                if foundPMR:
+                    # Do not change anything if project already contains a PMR
+                    print "Found pmr in " + os.path.join(path, folder)
+                else:
+                    print "PMR not found in " + os.path.join(path, folder) + ". Generating now"
+                    # Generate pmr in project directories where it does not yet exist under the name PMR.txt
+                    with open(os.path.join(path, folder, "PMR.txt"), "w+") as pmr:
+                        pmr.write(self.pmrOutline(folder))
